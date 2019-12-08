@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+    <beans xmlns="http://www.springframework.org/schema/beans"  
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+            xmlns:aop="http://www.springframework.org/schema/aop"  
+            xmlns:p="http://www.springframework.org/schema/p"  
+            xmlns:tx="http://www.springframework.org/schema/tx"  
+            xmlns:context="http://www.springframework.org/schema/context"  
+            xsi:schemaLocation="   
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd   
+                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd   
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+                http://www.springframework.org/schema/context 
+                http://www.springframework.org/schema/context/spring-context.xsd">
+	<!--    注解查询-->
+	<context:component-scan base-package="cn.app.service"/>
+    <context:component-scan base-package="cn.app.dao"/>
+    <context:annotation-config />
+	<!--引入数据库配置文件-->
+	<context:property-placeholder location="classpath:database.properties"/>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<!--数据源需要配置 jdbc.xxx -->
+		<property name="driverClassName" value="${driver}"/>
+		<property name="url" value="${url}"/>
+		<property name="username" value="${user}"/>
+		<property name="password" value="${password}"/>
+	</bean>
+	 	
+    <!-- 事务管理   -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+    	<property name="dataSource" ref="dataSource"/>  
+ 	</bean>
+   
+ 	<!-- 配置mybatis SqlSessionFactoryBean -->
+ 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<!--定位mapper文件-->
+			<list>
+				<value>classpath:cn.appPlat.dao/*.xml</value>
+			</list>
+		</property>
+ 	</bean>
+ 	
+ 	<aop:aspectj-autoproxy/>
+      <aop:config proxy-target-class="true">
+      	<aop:pointcut expression="execution(* *cn.appsys.service..*(..))" id="transService"/>
+      	<aop:advisor advice-ref="myAdvice" pointcut-ref="transService"/>
+      </aop:config>
+      
+ 	<tx:advice id="myAdvice" transaction-manager="txManager">  
+    	<tx:attributes>  
+	        <tx:method name="appsys*"  propagation="REQUIRED" rollback-for="Exception"  />
+	        <tx:method name="*" />
+    	</tx:attributes>  
+ 	</tx:advice>
+    
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<property name="basePackage" value="cn.app.dao"/>
+    </bean>       
+</beans>
