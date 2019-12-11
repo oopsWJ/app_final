@@ -131,11 +131,11 @@ public class AppMgtController {
 		
 		//二级分类列表和三级分类列表---回显
 		if(queryCategoryLevel2 != null && !queryCategoryLevel2.equals("")){
-			categoryLevel2List = getCategoryList(queryCategoryLevel1.toString());
+			categoryLevel2List = getAppCategoryList(queryCategoryLevel1.toString());
 			model.addAttribute("categoryLevel2List", categoryLevel2List);
 		}
 		if(queryCategoryLevel3 != null && !queryCategoryLevel3.equals("")){
-			categoryLevel3List = getCategoryList(queryCategoryLevel2.toString());
+			categoryLevel3List = getAppCategoryList(queryCategoryLevel2.toString());
 			model.addAttribute("categoryLevel3List", categoryLevel3List);
 		}
 		return "developer/appinfolist";
@@ -167,9 +167,6 @@ public class AppMgtController {
 	@ResponseBody
 	public List<AppCategory> getAppCategoryList (@RequestParam String pid){
 		if(pid.equals("")) pid = null;
-		return getCategoryList(pid);
-	}
-	public List<AppCategory> getCategoryList (String pid){
 		List<AppCategory> categoryLevelList = null;
 		try {
 			categoryLevelList = appCategoryService.getAppCategoryListByParentId(pid==null?null:Integer.parseInt(pid));
@@ -178,6 +175,7 @@ public class AppMgtController {
 		}
 		return categoryLevelList;
 	}
+
 
 
 	/**
