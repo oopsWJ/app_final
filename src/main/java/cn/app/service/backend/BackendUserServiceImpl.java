@@ -9,13 +9,13 @@ import cn.app.model.BackendUser;
 @Service
 public class BackendUserServiceImpl implements BackendUserService {
 	@Resource
-	private BackendUserMapper mapper;
+	private BackendUserMapper userMapper;
 	
 	@Override
 	public BackendUser login(String userCode, String userPassword) throws Exception {
 		// TODO Auto-generated method stub
 		BackendUser user = null;
-		user = mapper.getLoginUser(userCode);
+		user = userMapper.getLoginUser(userCode);
 		//匹配密码
 		if(null != user){
 			if(!user.getUserPassword().equals(userPassword))

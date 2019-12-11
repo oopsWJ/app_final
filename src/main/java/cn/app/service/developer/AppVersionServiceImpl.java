@@ -13,14 +13,14 @@ import cn.app.model.AppVersion;
 public class AppVersionServiceImpl implements AppVersionService {
 	
 	@Resource
-	private  AppVersionMapper mapper;
+	private  AppVersionMapper appVersionMapper;
 	@Resource
 	private AppInfoMapper appInfoMapper;
 	
 	@Override
 	public List<AppVersion> getAppVersionList(Integer appId) throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppVersionList(appId);
+		return appVersionMapper.getAppVersionList(appId);
 	}
 	/**
 	 * 业务：新增app的版本信息
@@ -33,7 +33,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 		// TODO Auto-generated method stub
 		boolean flag = false;
 		Integer versionId = null;
-		if(mapper.add(appVersion) > 0){
+		if(appVersionMapper.add(appVersion) > 0){
 			versionId = appVersion.getId();
 			flag = true;
 		}
@@ -45,13 +45,13 @@ public class AppVersionServiceImpl implements AppVersionService {
 	@Override
 	public AppVersion getAppVersionById(Integer id) throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppVersionById(id);
+		return appVersionMapper.getAppVersionById(id);
 	}
 	@Override
 	public boolean modify(AppVersion appVersion) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.modify(appVersion) > 0){
+		if(appVersionMapper.modify(appVersion) > 0){
 			flag = true;
 		}
 		return flag;
@@ -60,7 +60,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 	public boolean deleteApkFile(Integer id) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.deleteApkFile(id) > 0){
+		if(appVersionMapper.deleteApkFile(id) > 0){
 			flag = true;
 		}
 		return flag;

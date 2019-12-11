@@ -15,7 +15,7 @@ import cn.app.model.AppVersion;
 @Service
 public class AppInfoServiceImpl implements AppInfoService {
 	@Resource
-	private AppInfoMapper mapper;
+	private AppInfoMapper appInfoMapper;
 	@Resource
 	private AppVersionMapper appVersionMapper;
 	
@@ -23,7 +23,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public boolean add(AppInfo appInfo) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.add(appInfo) > 0){
+		if(appInfoMapper.add(appInfo) > 0){
 			flag = true;
 		}
 		return flag;
@@ -33,7 +33,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public boolean modify(AppInfo appInfo) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.modify(appInfo) > 0){
+		if(appInfoMapper.modify(appInfo) > 0){
 			flag = true;
 		}
 		return flag;
@@ -43,7 +43,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public boolean deleteAppInfoById(Integer delId) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.deleteAppInfoById(delId) > 0){
+		if(appInfoMapper.deleteAppInfoById(delId) > 0){
 			flag = true;
 		}
 		return flag;
@@ -52,7 +52,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	@Override
 	public AppInfo getAppInfo(Integer id,String APKName) throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppInfo(id,APKName);
+		return appInfoMapper.getAppInfo(id,APKName);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 									Integer queryFlatformId, Integer devId, Integer currentPageNo,
 									Integer pageSize) throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppInfoList(querySoftwareName, queryStatus, queryCategoryLevel1, queryCategoryLevel2, queryCategoryLevel3, queryFlatformId, devId, (currentPageNo-1)*pageSize, pageSize);
+		return appInfoMapper.getAppInfoList(querySoftwareName, queryStatus, queryCategoryLevel1, queryCategoryLevel2, queryCategoryLevel3, queryFlatformId, devId, (currentPageNo-1)*pageSize, pageSize);
 	}
 
 	@Override
@@ -71,14 +71,14 @@ public class AppInfoServiceImpl implements AppInfoService {
 			Integer queryCategoryLevel3, Integer queryFlatformId, Integer devId)
 			throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppInfoCount(querySoftwareName, queryStatus, queryCategoryLevel1, queryCategoryLevel2, queryCategoryLevel3, queryFlatformId,devId);
+		return appInfoMapper.getAppInfoCount(querySoftwareName, queryStatus, queryCategoryLevel1, queryCategoryLevel2, queryCategoryLevel3, queryFlatformId,devId);
 	}
 
 	@Override
 	public boolean deleteAppLogo(Integer id) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(mapper.deleteAppLogo(id) > 0){
+		if(appInfoMapper.deleteAppLogo(id) > 0){
 			flag = true;
 		}
 		return flag;
@@ -114,7 +114,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 		}
 		//2 再删app基础信息
 		//<1> 删除上传的logo图片
-		AppInfo appInfo = mapper.getAppInfo(id, null);
+		AppInfo appInfo = appInfoMapper.getAppInfo(id, null);
 		if(appInfo.getLogoLocPath() != null && !appInfo.getLogoLocPath().equals("")){
 			File file = new File(appInfo.getLogoLocPath());
 			if(file.exists()){
@@ -123,7 +123,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 			}
 		}
 		//<2> 删除app_info表数据
-		if(mapper.deleteAppInfoById(id) > 0){
+		if(appInfoMapper.deleteAppInfoById(id) > 0){
 			flag = true;
 		}
 		return flag;
@@ -146,7 +146,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 		}
 		
 		//get appinfo by appid
-		AppInfo appInfo = mapper.getAppInfo(appInfoObj.getId(), null);
+		AppInfo appInfo = appInfoMapper.getAppInfo(appInfoObj.getId(), null);
 		if(null == appInfo){
 			return false;
 		}else{
@@ -197,7 +197,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 		_appInfo.setStatus(appInfStatus);
 		_appInfo.setModifyBy(operator);
 		_appInfo.setOffSaleDate(new Date(System.currentTimeMillis()));
-		mapper.modify(_appInfo);
+		appInfoMapper.modify(_appInfo);
 		return true;
 	}
 	

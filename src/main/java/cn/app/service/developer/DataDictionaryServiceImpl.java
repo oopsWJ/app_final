@@ -11,13 +11,13 @@ import java.util.List;
 public class DataDictionaryServiceImpl implements DataDictionaryService {
 	
 	@Resource
-	private DataDictionaryMapper mapper;
+	private DataDictionaryMapper dataDictionaryMapper;
 	
 	@Override
 	public List<DataDictionary> getDataDictionaryList(String typeCode)
 			throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getDataDictionaryList(typeCode);
+		return dataDictionaryMapper.getDataDictionaryList(typeCode);
 	}
 
 }

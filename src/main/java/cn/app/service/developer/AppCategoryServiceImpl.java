@@ -11,13 +11,13 @@ import cn.app.model.AppCategory;
 public class AppCategoryServiceImpl implements AppCategoryService {
 
 	@Resource
-	private AppCategoryMapper mapper;
+	private AppCategoryMapper appCategoryMapper;
 	
 	@Override
 	public List<AppCategory> getAppCategoryListByParentId(Integer parentId)
 			throws Exception {
 		// TODO Auto-generated method stub
-		return mapper.getAppCategoryListByParentId(parentId);
+		return appCategoryMapper.getAppCategoryListByParentId(parentId);
 	}
 
 }
