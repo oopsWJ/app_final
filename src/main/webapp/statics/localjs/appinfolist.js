@@ -64,6 +64,7 @@ $("#queryCategoryLevel2").change(function(){
 $(".addVersion").on("click",function(){
 	var obj = $(this);
 	window.location.href="appVersionAdd?id="+obj.attr("appinfoid");
+	console.log("appVersionAdd?id="+obj.attr("appinfoid"))
 });
 $(".modifyVersion").on("click",function(){
 	var obj = $(this);

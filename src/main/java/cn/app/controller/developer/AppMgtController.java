@@ -34,7 +34,11 @@ public class AppMgtController {
 	private AppCategoryService appCategoryService;
 	@Resource
 	private AppVersionService appVersionService;
-	
+
+	/**
+	 * yxq
+	 * 搜索数据
+	 * */
 	@RequestMapping(value= "/appInfoList")
 	public String getAppInfoList(Model model,HttpSession session,
 							@RequestParam(value="querySoftwareName",required=false) String querySoftwareName,
@@ -136,7 +140,6 @@ public class AppMgtController {
 		}
 		return "developer/appinfolist";
 	}
-	
 	public List<DataDictionary> getDataDictionaryList(String typeCode){
 		List<DataDictionary> dataDictionaryList = null;
 		try {
@@ -157,6 +160,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * yxq
 	 * 根据parentId查询出相应的分类级别列表
 	 */
 	@RequestMapping(value= "/categoryLevelList.json",method=RequestMethod.GET)
@@ -165,7 +169,6 @@ public class AppMgtController {
 		if(pid.equals("")) pid = null;
 		return getCategoryList(pid);
 	}
-	
 	public List<AppCategory> getCategoryList (String pid){
 		List<AppCategory> categoryLevelList = null;
 		try {
@@ -175,7 +178,10 @@ public class AppMgtController {
 		}
 		return categoryLevelList;
 	}
+
+
 	/**
+	 * yxq
 	 * 跳转到新增appinfo页面
 	 */
 	@RequestMapping(value= "/appInfoAdd",method=RequestMethod.GET)
@@ -184,6 +190,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * yxq
 	 * 新增并保存appInfo（主表）的数据
 	 */
 	@RequestMapping(value= "/doAppInfoAdd",method=RequestMethod.POST)
@@ -238,6 +245,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * wj
 	 * 跳转到新增app版本页面
 	 */
 	@RequestMapping(value= "/appVersionAdd",method=RequestMethod.GET)
@@ -266,6 +274,7 @@ public class AppMgtController {
 		return "developer/appversionadd";
 	}
 	/**
+	 * wj
 	 * 保存新增appversion数据（子表）-上传该版本的apk包
 	 */
 	@RequestMapping(value= "/doAppVersionAdd",method=RequestMethod.POST)
@@ -322,7 +331,11 @@ public class AppMgtController {
 		}
 		return "redirect:/dev/appMgt/appVersionAdd?id="+appVersion.getAppId();
 	}
-	
+
+	/**
+	 * wj
+	 * 版本上下架切换
+	 * */
 	@RequestMapping(value="/{appid}/sale",method=RequestMethod.PUT)
 	@ResponseBody
 	public Object sale(@PathVariable String appid,HttpSession session){
@@ -364,6 +377,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * 异步调用
 	 * 判断APKName是否唯一
 	 */
 	@RequestMapping(value= "/apkExist.json",method=RequestMethod.GET)
@@ -388,6 +402,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * wj
 	 * 跳转到查看页面
 	 */
 	@RequestMapping(value= "/appInfoView/{id}",method=RequestMethod.GET)
@@ -407,6 +422,7 @@ public class AppMgtController {
 	
 
 	/**
+	 * yxq
 	 * 跳转到修改appInfo页面
 	 */
 	@RequestMapping(value= "/appInfoModify",method=RequestMethod.GET)
@@ -434,6 +450,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * wj
 	 * 跳转到修改appVersion页面
 	 */
 	@RequestMapping(value= "/appVersionModify",method=RequestMethod.GET)
@@ -464,6 +481,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * wj
 	 * 修改appVersion,并保存信息
 	 */
 	@RequestMapping(value= "/doAppVersionModify",method=RequestMethod.POST)
@@ -526,6 +544,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * yxq
 	 * 修改操作时，删除文件（logo图片/apk文件），并更新数据库（app_info/app_version）
 	 */
 	@RequestMapping(value = "/delFile",method=RequestMethod.GET)
@@ -619,7 +638,9 @@ public class AppMgtController {
 		return "developer/appinfomodify";
 	}
 	
-	
+	/**
+	 * 删除app
+	 * */
 	@RequestMapping(value= "/delApp.json")
 	@ResponseBody
 	public Object delApp(@RequestParam String id){
