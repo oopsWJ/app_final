@@ -5,7 +5,7 @@ import cn.app.service.developer.AppCategoryService;
 import cn.app.service.developer.AppInfoService;
 import cn.app.service.developer.AppVersionService;
 import cn.app.service.developer.DataDictionaryService;
-import cn.app.tools.Constants;
+import cn.app.tools.SystemValues;
 import cn.app.tools.PageSupport;
 import com.alibaba.fastjson.JSONArray;
 import com.mysql.jdbc.StringUtils;
@@ -49,7 +49,7 @@ public class AppMgtController {
 							@RequestParam(value="queryFlatformId",required=false) String _queryFlatformId,
 							@RequestParam(value="pageIndex",required=false) String pageIndex){
 		
-		Integer devId = ((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId();
+		Integer devId = ((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId();
 		List<AppInfo> appInfoList = null;
 		List<DataDictionary> statusList = null;
 		List<DataDictionary> flatFormList = null;
@@ -57,7 +57,7 @@ public class AppMgtController {
 		List<AppCategory> categoryLevel2List = null;
 		List<AppCategory> categoryLevel3List = null;
 		//页面容量
-		int pageSize = Constants.pageSize;
+		int pageSize = SystemValues.pageSize;
 		//当前页码
 		Integer currentPageNo = 1;
 		
@@ -203,7 +203,7 @@ public class AppMgtController {
 			String prefix = FilenameUtils.getExtension(oldFileName);//原文件后缀
 			int filesize = 500000;
 			if(attach.getSize() > filesize){//上传大小不得超过 50k
-				request.setAttribute("fileUploadError", Constants.FILEUPLOAD_ERROR_4);
+				request.setAttribute("fileUploadError", SystemValues.FILEUPLOAD_ERROR_4);
 				return "developer/appinfoadd";
             }else if(prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png") 
 			   ||prefix.equalsIgnoreCase("jepg") || prefix.equalsIgnoreCase("pneg")){//上传图片格式
@@ -216,21 +216,21 @@ public class AppMgtController {
 					attach.transferTo(targetFile);
 				} catch (Exception e) {
 					e.printStackTrace();
-					request.setAttribute("fileUploadError", Constants.FILEUPLOAD_ERROR_2);
+					request.setAttribute("fileUploadError", SystemValues.FILEUPLOAD_ERROR_2);
 					return "developer/appinfoadd";
 				} 
 				 logoPicPath = request.getContextPath()+"/statics/uploadfiles/"+fileName;
 				 logoLocPath = path+File.separator+fileName;
 			}else{
-				request.setAttribute("fileUploadError", Constants.FILEUPLOAD_ERROR_3);
+				request.setAttribute("fileUploadError", SystemValues.FILEUPLOAD_ERROR_3);
 				return "developer/appinfoadd";
 			}
 		}
-		appInfo.setCreatedBy(((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId());
+		appInfo.setCreatedBy(((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
 		appInfo.setCreationDate(new Date());
 		appInfo.setLogoPicPath(logoPicPath);
 		appInfo.setLogoLocPath(logoLocPath);
-		appInfo.setDevId(((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId());
+		appInfo.setDevId(((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
 		appInfo.setStatus(1);
 		try {
 			if(appInfoService.add(appInfo)){
@@ -251,11 +251,11 @@ public class AppMgtController {
 								@RequestParam(value="error",required= false)String fileUploadError,
 								AppVersion appVersion, Model model){
 		if(null != fileUploadError && fileUploadError.equals("error1")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_1;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
 		}else if(null != fileUploadError && fileUploadError.equals("error2")){
-			fileUploadError	= Constants.FILEUPLOAD_ERROR_2;
+			fileUploadError	= SystemValues.FILEUPLOAD_ERROR_2;
 		}else if(null != fileUploadError && fileUploadError.equals("error3")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_3;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_3;
 		}
 		appVersion.setAppId(Integer.parseInt(appId));
 		List<AppVersion> appVersionList = null;
@@ -315,7 +315,7 @@ public class AppMgtController {
 						 +"&error=error3";
 			}
 		}
-		appVersion.setCreatedBy(((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId());
+		appVersion.setCreatedBy(((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
 		appVersion.setCreationDate(new Date());
 		appVersion.setDownloadLink(downloadLink);
 		appVersion.setApkLocPath(apkLocPath);
@@ -348,7 +348,7 @@ public class AppMgtController {
 		resultMap.put("appId", appid);
 		if(appIdInteger>0){
 			try {
-				DevUser devUser = (DevUser)session.getAttribute(Constants.DEV_USER_SESSION);
+				DevUser devUser = (DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION);
 				AppInfo appInfo = new AppInfo();
 				appInfo.setId(appIdInteger);
 				appInfo.setModifyBy(devUser.getId());
@@ -422,13 +422,13 @@ public class AppMgtController {
 								Model model){
 		AppInfo appInfo = null;
 		if(null != fileUploadError && fileUploadError.equals("error1")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_1;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
 		}else if(null != fileUploadError && fileUploadError.equals("error2")){
-			fileUploadError	= Constants.FILEUPLOAD_ERROR_2;
+			fileUploadError	= SystemValues.FILEUPLOAD_ERROR_2;
 		}else if(null != fileUploadError && fileUploadError.equals("error3")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_3;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_3;
 		}else if(null != fileUploadError && fileUploadError.equals("error4")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_4;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_4;
 		}
 		try {
 			appInfo = appInfoService.getAppInfo(Integer.parseInt(id),null);
@@ -452,11 +452,11 @@ public class AppMgtController {
 		AppVersion appVersion = null;
 		List<AppVersion> appVersionList = null;
 		if(null != fileUploadError && fileUploadError.equals("error1")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_1;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
 		}else if(null != fileUploadError && fileUploadError.equals("error2")){
-			fileUploadError	= Constants.FILEUPLOAD_ERROR_2;
+			fileUploadError	= SystemValues.FILEUPLOAD_ERROR_2;
 		}else if(null != fileUploadError && fileUploadError.equals("error3")){
-			fileUploadError = Constants.FILEUPLOAD_ERROR_3;
+			fileUploadError = SystemValues.FILEUPLOAD_ERROR_3;
 		}
 		try {
 			appVersion = appVersionService.getAppVersionById(Integer.parseInt(versionId));
@@ -519,7 +519,7 @@ public class AppMgtController {
 						 +"&error=error3";
 			}
 		}
-		appVersion.setModifyBy(((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId());
+		appVersion.setModifyBy(((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
 		appVersion.setModifyDate(new Date());
 		appVersion.setDownloadLink(downloadLink);
 		appVersion.setApkLocPath(apkLocPath);
@@ -616,7 +616,7 @@ public class AppMgtController {
 						 +"&error=error3";
             }
 		}
-		appInfo.setModifyBy(((DevUser)session.getAttribute(Constants.DEV_USER_SESSION)).getId());
+		appInfo.setModifyBy(((DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
 		appInfo.setModifyDate(new Date());
 		appInfo.setLogoLocPath(logoLocPath);
 		appInfo.setLogoPicPath(logoPicPath);

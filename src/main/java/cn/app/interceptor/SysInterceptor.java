@@ -2,7 +2,7 @@ package cn.app.interceptor;
 
 import cn.app.model.BackendUser;
 import cn.app.model.DevUser;
-import cn.app.tools.Constants;
+import cn.app.tools.SystemValues;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -18,8 +18,8 @@ public class SysInterceptor extends HandlerInterceptorAdapter {
 		logger.debug("SysInterceptor preHandle ==========================");
 		HttpSession session = request.getSession();
 		
-		BackendUser backendUser = (BackendUser)session.getAttribute(Constants.USER_SESSION);
-		DevUser devUser = (DevUser)session.getAttribute(Constants.DEV_USER_SESSION);
+		BackendUser backendUser = (BackendUser)session.getAttribute(SystemValues.USER_SESSION);
+		DevUser devUser = (DevUser)session.getAttribute(SystemValues.DEV_USER_SESSION);
 		
 		if(null != devUser){ //dev SUCCESS
 			return true;

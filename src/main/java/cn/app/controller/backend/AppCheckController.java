@@ -8,7 +8,7 @@ import cn.app.service.backend.AppService;
 import cn.app.service.developer.AppCategoryService;
 import cn.app.service.developer.AppVersionService;
 import cn.app.service.developer.DataDictionaryService;
-import cn.app.tools.Constants;
+import cn.app.tools.SystemValues;
 import cn.app.tools.PageSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +52,7 @@ public class AppCheckController {
 		List<AppCategory> categoryLevel2List = null;
 		List<AppCategory> categoryLevel3List = null;
 		//页面容量
-		int pageSize = Constants.pageSize;
+		int pageSize = SystemValues.pageSize;
 		//当前页码
 		Integer currentPageNo = 1;
 		

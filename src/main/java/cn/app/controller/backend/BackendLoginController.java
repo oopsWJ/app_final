@@ -2,7 +2,7 @@ package cn.app.controller.backend;
 
 import cn.app.model.BackendUser;
 import cn.app.service.backend.BackendUserService;
-import cn.app.tools.Constants;
+import cn.app.tools.SystemValues;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +38,7 @@ public class BackendLoginController {
 		}
 		if(null != user){//登录成功
 			//放入session
-			session.setAttribute(Constants.USER_SESSION, user);
+			session.setAttribute(SystemValues.USER_SESSION, user);
 			//页面跳转（main.jsp）
 			return "redirect:/backend/main";
 		}else{
@@ -50,7 +50,7 @@ public class BackendLoginController {
 	
 	@RequestMapping(value= "/main")
 	public String main(HttpSession session){
-		if(session.getAttribute(Constants.USER_SESSION) == null){
+		if(session.getAttribute(SystemValues.USER_SESSION) == null){
 			return "redirect:/backend/login";
 		}
 		return "backend/main";
@@ -59,7 +59,7 @@ public class BackendLoginController {
 	@RequestMapping(value="/logout")
 	public String logout(HttpSession session){
 		//清除session
-		session.removeAttribute(Constants.USER_SESSION);
+		session.removeAttribute(SystemValues.USER_SESSION);
 		return "backendlogin";
 	}
 }
