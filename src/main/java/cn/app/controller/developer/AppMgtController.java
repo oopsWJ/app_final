@@ -364,13 +364,6 @@ public class AppMgtController {
 			//errorCode:0为正常
 			resultMap.put("errorCode", "param000001");
 		}
-		
-		/*
-		 * resultMsg:success/failed
-		 * errorCode:exception000001
-		 * appId:appId
-		 * errorCode:param000001
-		 */
 		return resultMap;
 	}
 	
@@ -585,6 +578,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * yxq
 	 * 修改appInfo并保存
 	 */
 	@RequestMapping(value= "/doAppInfoModify",method=RequestMethod.POST)
@@ -637,6 +631,7 @@ public class AppMgtController {
 	}
 	
 	/**
+	 * wj
 	 * 删除app
 	 * */
 	@RequestMapping(value= "/delApp.json")
