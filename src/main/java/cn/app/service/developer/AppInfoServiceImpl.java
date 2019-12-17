@@ -97,7 +97,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 		boolean flag = false;
 		int versionCount = appVersionMapper.getVersionCountByAppId(id);
 		List<AppVersion> appVersionList = null;
-		if(versionCount > 0){//1 先删版本信息
+		if(versionCount > 0){//1 如果有版本，先删版本信息
 			//<1> 删除上传的apk文件
 			appVersionList = appVersionMapper.getAppVersionList(id);
 			for(AppVersion appVersion:appVersionList){
