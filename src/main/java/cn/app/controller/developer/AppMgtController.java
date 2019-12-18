@@ -393,6 +393,13 @@ public class AppMgtController {
         return JSONArray.toJSONString(resultMap);
     }
 
+
+    /**
+     * *******************************************************************************
+     */
+
+
+
     /**
      * wj
      * 跳转到查看页面

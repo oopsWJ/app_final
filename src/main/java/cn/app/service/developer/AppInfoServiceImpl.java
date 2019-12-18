@@ -87,11 +87,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	}
 	
 	/**
-	 * 业务：根据appId删除APP信息
-	 * 1、通过appId，查询app_verion表中是否有数据
-	 * 2、若版本表中有该app应用对应的版本信息，则进行级联删除，先删版本信息（app_version），后删app基本信息（app_info）
-	 * 3、若版本表中无该app应用对应的版本信息，则直接删除app基本信息（app_info）。
-	 * 注意：事务控制，上传文件的删除
+	 * 删除APP信息
 	 */
 	@Override
 	public boolean appsysdeleteAppById(Integer id) throws Exception {
