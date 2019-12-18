@@ -188,9 +188,10 @@ $(".deleteApp").on("click",function(){
 			data:{id:obj.attr("appinfoid")},
 			dataType:"json",
 			success:function(data){
-				if(data.delResult == "true"){//删除成功：移除删除行
+				if(data.delResult == "true"){//删除成功：返回列表
 					alert("删除成功");
-					obj.parents("tr").remove();
+					// obj.parents("tr").remove();
+                    window.location.href = "appInfoList";
 				}else if(data.delResult == "false"){//删除失败
 					alert("对不起，删除AAP应用【"+obj.attr("appsoftwarename")+"】失败");
 				}else if(data.delResult == "notexist"){
