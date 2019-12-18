@@ -23,8 +23,10 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public boolean add(AppInfo appInfo) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		if(appInfoMapper.add(appInfo) > 0){
-			flag = true;
+		if (appInfoMapper.getAppInfo(null,appInfo.getAPKName()) == null){
+			if(appInfoMapper.add(appInfo) > 0){
+				flag = true;
+			}
 		}
 		return flag;
 	}

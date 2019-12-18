@@ -266,7 +266,7 @@ public class AppMgtController {
         } else {
             AppInfo appInfo = null;
             try {
-                //通过id，APKName获取AppInfo
+                //通过APKName获取AppInfo
                 appInfo = appInfoService.getAppInfo(null, APKName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -379,8 +379,9 @@ public class AppMgtController {
             resultMap.put("delResult", "notexist");
         } else {
             try {
-                if (appInfoService.appsysdeleteAppById(Integer.parseInt(id)))
+                if (appInfoService.appsysdeleteAppById(Integer.parseInt(id))){
                     resultMap.put("delResult", "true");
+                }
                 else
                     resultMap.put("delResult", "false");
             } catch (NumberFormatException e) {
