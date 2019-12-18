@@ -250,6 +250,167 @@ public class AppMgtController {
         return "developer/appinfoadd";
     }
 
+
+    /**
+     * yxq
+     * 异步调用
+     * 判断APKName是否唯一
+     */
+    @RequestMapping(value = "/apkExist.json", method = RequestMethod.GET)
+    @ResponseBody
+    public Object apkNameIsExist(@RequestParam String APKName) {
+        HashMap<String, String> resultMap = new HashMap<String, String>();
+        //如果APKName为空
+        if (StringUtils.isNullOrEmpty(APKName)) {
+            resultMap.put("APKName", "empty");
+        } else {
+            AppInfo appInfo = null;
+            try {
+                //通过id，APKName获取AppInfo
+                appInfo = appInfoService.getAppInfo(null, APKName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (null != appInfo)
+                resultMap.put("APKName", "exist");
+            else
+                resultMap.put("APKName", "noexist");
+        }
+        return JSONArray.toJSONString(resultMap);
+    }
+
+
+
+    /**
+     * yxq
+     * 跳转到修改appInfo页面
+     */
+    @RequestMapping(value = "/appInfoModify", method = RequestMethod.GET)
+    public String appInfoModify(@RequestParam("id") String id,
+                                @RequestParam(value = "error", required = false) String fileUploadError,
+                                Model model) {
+        AppInfo appInfo = null;
+        if (null != fileUploadError && fileUploadError.equals("error1")) {
+            fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
+        } else if (null != fileUploadError && fileUploadError.equals("error2")) {
+            fileUploadError = SystemValues.FILEUPLOAD_ERROR_2;
+        } else if (null != fileUploadError && fileUploadError.equals("error3")) {
+            fileUploadError = SystemValues.FILEUPLOAD_ERROR_3;
+        } else if (null != fileUploadError && fileUploadError.equals("error4")) {
+            fileUploadError = SystemValues.FILEUPLOAD_ERROR_4;
+        }
+        try {
+            appInfo = appInfoService.getAppInfo(Integer.parseInt(id), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute(appInfo);
+        model.addAttribute("fileUploadError", fileUploadError);
+        return "developer/appinfomodify";
+    }
+
+    /**
+     * yxq
+     * 修改appInfo并保存
+     */
+    @RequestMapping(value = "/doAppInfoModify", method = RequestMethod.POST)
+    public String doAppInfoModify(AppInfo appInfo, HttpSession session, HttpServletRequest request,
+                                  @RequestParam(value = "attach", required = false) MultipartFile attach) {
+        String logoPicPath = null;
+        String logoLocPath = null;
+        String APKName = appInfo.getAPKName();
+        if (!attach.isEmpty()) {
+            String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+            String oldFileName = attach.getOriginalFilename();//原文件名
+            String prefix = FilenameUtils.getExtension(oldFileName);//原文件后缀
+            int filesize = 500000;
+            if (attach.getSize() > filesize) {//上传大小不得超过 50k
+                return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
+                        + "&error=error4";
+            } else if (prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png")
+                    || prefix.equalsIgnoreCase("jepg") || prefix.equalsIgnoreCase("pneg")) {//上传图片格式
+                String fileName = APKName + ".jpg";//上传LOGO图片命名:apk名称.apk
+                //绝对路径文件名
+                File targetFile = new File(path, fileName);
+                if (!targetFile.exists()) {
+                    targetFile.mkdirs();
+                }
+                try {
+                    //使用绝对路径保存文件
+                    attach.transferTo(targetFile);
+                } catch (Exception e) {
+                    //上传失败
+                    e.printStackTrace();
+                    return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
+                            + "&error=error2";
+                }
+                //使用相对路径,存到数据库
+                logoPicPath = request.getContextPath() + "/statics/uploadfiles/" + fileName;
+                logoLocPath = path + File.separator + fileName;
+            } else {
+                //上传格式错误
+                return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
+                        + "&error=error3";
+            }
+        }
+        appInfo.setModifyBy(((DevUser) session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
+        appInfo.setModifyDate(new Date());
+        appInfo.setLogoLocPath(logoLocPath);
+        appInfo.setLogoPicPath(logoPicPath);
+        try {
+            if (appInfoService.modify(appInfo)) {
+                return "redirect:/dev/appMgt/appInfoList";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "developer/appinfomodify";
+    }
+
+    /**
+     * yxq
+     * 删除app
+     */
+    @RequestMapping(value = "/delApp.json")
+    @ResponseBody
+    public Object delApp(@RequestParam String id) {
+        HashMap<String, String> resultMap = new HashMap<String, String>();
+        if (StringUtils.isNullOrEmpty(id)) {
+            resultMap.put("delResult", "notexist");
+        } else {
+            try {
+                if (appInfoService.appsysdeleteAppById(Integer.parseInt(id)))
+                    resultMap.put("delResult", "true");
+                else
+                    resultMap.put("delResult", "false");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return JSONArray.toJSONString(resultMap);
+    }
+
+    /**
+     * wj
+     * 跳转到查看页面
+     */
+    @RequestMapping(value = "/appInfoView/{id}", method = RequestMethod.GET)
+    public String appInfoView(@PathVariable String id, Model model) {
+        AppInfo appInfo = null;
+        List<AppVersion> appVersionList = null;
+        try {
+            appInfo = appInfoService.getAppInfo(Integer.parseInt(id), null);
+            appVersionList = appVersionService.getAppVersionList(Integer.parseInt(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("appVersionList", appVersionList);
+        model.addAttribute(appInfo);
+        return "developer/appinfoview";
+    }
+
     /**
      * wj
      * 跳转到新增app版本页面
@@ -374,82 +535,6 @@ public class AppMgtController {
             resultMap.put("errorCode", "param000001");
         }
         return resultMap;
-    }
-
-    /**
-     * yxq
-     * 异步调用
-     * 判断APKName是否唯一
-     */
-    @RequestMapping(value = "/apkExist.json", method = RequestMethod.GET)
-    @ResponseBody
-    public Object apkNameIsExist(@RequestParam String APKName) {
-        HashMap<String, String> resultMap = new HashMap<String, String>();
-        //如果APKName为空
-        if (StringUtils.isNullOrEmpty(APKName)) {
-            resultMap.put("APKName", "empty");
-        } else {
-            AppInfo appInfo = null;
-            try {
-                //通过id，APKName获取AppInfo
-                appInfo = appInfoService.getAppInfo(null, APKName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (null != appInfo)
-                resultMap.put("APKName", "exist");
-            else
-                resultMap.put("APKName", "noexist");
-        }
-        return JSONArray.toJSONString(resultMap);
-    }
-
-    /**
-     * wj
-     * 跳转到查看页面
-     */
-    @RequestMapping(value = "/appInfoView/{id}", method = RequestMethod.GET)
-    public String appInfoView(@PathVariable String id, Model model) {
-        AppInfo appInfo = null;
-        List<AppVersion> appVersionList = null;
-        try {
-            appInfo = appInfoService.getAppInfo(Integer.parseInt(id), null);
-            appVersionList = appVersionService.getAppVersionList(Integer.parseInt(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("appVersionList", appVersionList);
-        model.addAttribute(appInfo);
-        return "developer/appinfoview";
-    }
-
-
-    /**
-     * yxq
-     * 跳转到修改appInfo页面
-     */
-    @RequestMapping(value = "/appInfoModify", method = RequestMethod.GET)
-    public String appInfoModify(@RequestParam("id") String id,
-                                @RequestParam(value = "error", required = false) String fileUploadError,
-                                Model model) {
-        AppInfo appInfo = null;
-        if (null != fileUploadError && fileUploadError.equals("error1")) {
-            fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
-        } else if (null != fileUploadError && fileUploadError.equals("error2")) {
-            fileUploadError = SystemValues.FILEUPLOAD_ERROR_2;
-        } else if (null != fileUploadError && fileUploadError.equals("error3")) {
-            fileUploadError = SystemValues.FILEUPLOAD_ERROR_3;
-        } else if (null != fileUploadError && fileUploadError.equals("error4")) {
-            fileUploadError = SystemValues.FILEUPLOAD_ERROR_4;
-        }
-        try {
-            appInfo = appInfoService.getAppInfo(Integer.parseInt(id), null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        model.addAttribute(appInfo);
-        model.addAttribute("fileUploadError", fileUploadError);
-        return "developer/appinfomodify";
     }
 
     /**
@@ -588,86 +673,4 @@ public class AppMgtController {
         return JSONArray.toJSONString(resultMap);
     }
 
-    /**
-     * yxq
-     * 修改appInfo并保存
-     */
-    @RequestMapping(value = "/doAppInfoModify", method = RequestMethod.POST)
-    public String doAppInfoModify(AppInfo appInfo, HttpSession session, HttpServletRequest request,
-                                  @RequestParam(value = "attach", required = false) MultipartFile attach) {
-        String logoPicPath = null;
-        String logoLocPath = null;
-        String APKName = appInfo.getAPKName();
-        if (!attach.isEmpty()) {
-            String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
-            String oldFileName = attach.getOriginalFilename();//原文件名
-            String prefix = FilenameUtils.getExtension(oldFileName);//原文件后缀
-            int filesize = 500000;
-            if (attach.getSize() > filesize) {//上传大小不得超过 50k
-                return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
-                        + "&error=error4";
-            } else if (prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png")
-                    || prefix.equalsIgnoreCase("jepg") || prefix.equalsIgnoreCase("pneg")) {//上传图片格式
-                String fileName = APKName + ".jpg";//上传LOGO图片命名:apk名称.apk
-				//绝对路径文件名
-                File targetFile = new File(path, fileName);
-                if (!targetFile.exists()) {
-                    targetFile.mkdirs();
-                }
-                try {
-					//使用绝对路径保存文件
-                    attach.transferTo(targetFile);
-                } catch (Exception e) {
-					//上传失败
-                    e.printStackTrace();
-                    return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
-                            + "&error=error2";
-                }
-				//使用相对路径,存到数据库
-                logoPicPath = request.getContextPath() + "/statics/uploadfiles/" + fileName;
-                logoLocPath = path + File.separator + fileName;
-            } else {
-            	//上传格式错误
-                return "redirect:/dev/appMgt/appInfoModify?id=" + appInfo.getId()
-                        + "&error=error3";
-            }
-        }
-        appInfo.setModifyBy(((DevUser) session.getAttribute(SystemValues.DEV_USER_SESSION)).getId());
-        appInfo.setModifyDate(new Date());
-        appInfo.setLogoLocPath(logoLocPath);
-        appInfo.setLogoPicPath(logoPicPath);
-        try {
-            if (appInfoService.modify(appInfo)) {
-                return "redirect:/dev/appMgt/appInfoList";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "developer/appinfomodify";
-    }
-
-    /**
-     * yxq
-     * 删除app
-     */
-    @RequestMapping(value = "/delApp.json")
-    @ResponseBody
-    public Object delApp(@RequestParam String id) {
-        HashMap<String, String> resultMap = new HashMap<String, String>();
-        if (StringUtils.isNullOrEmpty(id)) {
-            resultMap.put("delResult", "notexist");
-        } else {
-            try {
-                if (appInfoService.appsysdeleteAppById(Integer.parseInt(id)))
-                    resultMap.put("delResult", "true");
-                else
-                    resultMap.put("delResult", "false");
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return JSONArray.toJSONString(resultMap);
-    }
 }
