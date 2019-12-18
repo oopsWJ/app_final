@@ -129,7 +129,7 @@ public class AppMgtController {
         model.addAttribute("queryCategoryLevel3", queryCategoryLevel3);
         model.addAttribute("queryFlatformId", queryFlatformId);
 
-        //二级分类列表和三级分类列表---回显
+        //回显二级分类列表和三级分类列表
         if (queryCategoryLevel2 != null && !queryCategoryLevel2.equals("")) {
             categoryLevel2List = getAppCategoryList(queryCategoryLevel1.toString());
             model.addAttribute("categoryLevel2List", categoryLevel2List);
@@ -190,7 +190,7 @@ public class AppMgtController {
 
     /**
      * yxq
-     * 新增并保存appInfo（主表）的数据
+     * 新增并保存appInfo的数据
      */
     @RequestMapping(value = "/doAppInfoAdd", method = RequestMethod.POST)
     public String doAppInfoAdd(AppInfo appInfo, HttpSession session, HttpServletRequest request,

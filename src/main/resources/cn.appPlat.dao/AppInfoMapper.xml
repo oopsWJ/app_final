@@ -18,24 +18,60 @@
     <update id="modify" parameterType="AppInfo">
         update app_info
         <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
-            <if test="softwareName != null">softwareName=#{softwareName},</if>
-            <if test="supportROM != null">supportROM=#{supportROM},</if>
-            <if test="interfaceLanguage != null">interfaceLanguage=#{interfaceLanguage},</if>
-            <if test="updateDate != null">updateDate=#{updateDate},</if>
-            <if test="softwareSize != null">softwareSize=#{softwareSize},</if>
-            <if test="appInfo != null">appInfo=#{appInfo},</if>
-            <if test="status != null">status=#{status},</if>
-            <if test="onSaleDate != null">onSaleDate=#{onSaleDate},</if>
-            <if test="offSaleDate != null">offSaleDate=#{offSaleDate},</if>
-            <if test="categoryLevel1 != null">categoryLevel1=#{categoryLevel1},</if>
-            <if test="categoryLevel2 != null">categoryLevel2=#{categoryLevel2},</if>
-            <if test="categoryLevel3 != null">categoryLevel3=#{categoryLevel3},</if>
-            <if test="downloads != null">downloads=#{downloads},</if>
-            <if test="flatformId != null">flatformId=#{flatformId},</if>
-            <if test="logoPicPath != null">logoPicPath=#{logoPicPath},</if>
-            <if test="logoLocPath != null">logoLocPath=#{logoLocPath},</if>
-            <if test="modifyBy != null">modifyBy=#{modifyBy},</if>
-            <if test="modifyDate != null">modifyDate=#{modifyDate},</if>
+            <if test="softwareName != null">
+                softwareName=#{softwareName},
+            </if>
+            <if test="supportROM != null">
+                supportROM=#{supportROM},
+            </if>
+            <if test="interfaceLanguage != null">
+                interfaceLanguage=#{interfaceLanguage},
+            </if>
+            <if test="updateDate != null">
+                updateDate=#{updateDate},
+            </if>
+            <if test="softwareSize != null">
+                softwareSize=#{softwareSize},
+            </if>
+            <if test="appInfo != null">
+                appInfo=#{appInfo},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="onSaleDate != null">
+                onSaleDate=#{onSaleDate},
+            </if>
+            <if test="offSaleDate != null">
+                offSaleDate=#{offSaleDate},
+            </if>
+            <if test="categoryLevel1 != null">
+                categoryLevel1=#{categoryLevel1},
+            </if>
+            <if test="categoryLevel2 != null">
+                categoryLevel2=#{categoryLevel2},
+            </if>
+            <if test="categoryLevel3 != null">
+                categoryLevel3=#{categoryLevel3},
+            </if>
+            <if test="downloads != null">
+                downloads=#{downloads},
+            </if>
+            <if test="flatformId != null">
+                flatformId=#{flatformId},
+            </if>
+            <if test="logoPicPath != null">
+                logoPicPath=#{logoPicPath},
+            </if>
+            <if test="logoLocPath != null">
+                logoLocPath=#{logoLocPath},
+            </if>
+            <if test="modifyBy != null">
+                modifyBy=#{modifyBy},
+            </if>
+            <if test="modifyDate != null">
+                modifyDate=#{modifyDate},
+            </if>
         </trim>
     </update>
 
