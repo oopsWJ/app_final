@@ -41,15 +41,14 @@ public class AppInfoServiceImpl implements AppInfoService {
 		return flag;
 	}
 
-	@Override
+	/*@Override
 	public boolean deleteAppInfoById(Integer delId) throws Exception {
-		// TODO Auto-generated method stub
 		boolean flag = false;
 		if(appInfoMapper.deleteAppInfoById(delId) > 0){
 			flag = true;
 		}
 		return flag;
-	}
+	}*/
 
 	@Override
 	public AppInfo getAppInfo(Integer id,String APKName) throws Exception {

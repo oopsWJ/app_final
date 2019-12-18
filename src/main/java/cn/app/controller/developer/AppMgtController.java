@@ -41,19 +41,17 @@ public class AppMgtController {
      */
     @RequestMapping(value = "/appInfoList")
     public String getAppInfoList(Model model, HttpSession session,
-                                 @RequestParam(value = "querySoftwareName", required = false) String querySoftwareName,
-                                 @RequestParam(value = "queryStatus", required = false) String _queryStatus,
-                                 @RequestParam(value = "queryCategoryLevel1", required = false) String _queryCategoryLevel1,
-                                 @RequestParam(value = "queryCategoryLevel2", required = false) String _queryCategoryLevel2,
-                                 @RequestParam(value = "queryCategoryLevel3", required = false) String _queryCategoryLevel3,
-                                 @RequestParam(value = "queryFlatformId", required = false) String _queryFlatformId,
-                                 @RequestParam(value = "pageIndex", required = false) String pageIndex) {
+                                 @RequestParam(value = "querySoftwareName", required = false) String querySoftwareName, @RequestParam(value = "queryStatus", required = false) String _queryStatus, @RequestParam(value = "queryCategoryLevel1", required = false) String _queryCategoryLevel1, @RequestParam(value = "queryCategoryLevel2", required = false) String _queryCategoryLevel2, @RequestParam(value = "queryCategoryLevel3", required = false) String _queryCategoryLevel3, @RequestParam(value = "queryFlatformId", required = false) String _queryFlatformId, @RequestParam(value = "pageIndex", required = false) String pageIndex) {
         //获取开发者ID
         Integer devId = ((DevUser) session.getAttribute(SystemValues.DEV_USER_SESSION)).getId();
+        //APP信息列表
         List<AppInfo> appInfoList = null;
+        //APP状态
         List<DataDictionary> statusList = null;
+        //APP平台
         List<DataDictionary> flatFormList = null;
-        List<AppCategory> categoryLevel1List = null;//列出一级分类列表，注：二级和三级分类列表通过异步ajax获取
+        //三个分类
+        List<AppCategory> categoryLevel1List = null;
         List<AppCategory> categoryLevel2List = null;
         List<AppCategory> categoryLevel3List = null;
         //页面容量
@@ -193,8 +191,7 @@ public class AppMgtController {
      * 新增并保存appInfo的数据
      */
     @RequestMapping(value = "/doAppInfoAdd", method = RequestMethod.POST)
-    public String doAppInfoAdd(AppInfo appInfo, HttpSession session, HttpServletRequest request,
-                               @RequestParam(value = "a_logoPicPath", required = false) MultipartFile attach) {
+    public String doAppInfoAdd(AppInfo appInfo, HttpSession session, HttpServletRequest request, @RequestParam(value = "a_logoPicPath", required = false) MultipartFile attach) {
 
         String logoPicPath = null;
         String logoLocPath = null;
@@ -286,8 +283,7 @@ public class AppMgtController {
      * 跳转到修改appInfo页面
      */
     @RequestMapping(value = "/appInfoModify", method = RequestMethod.GET)
-    public String appInfoModify(@RequestParam("id") String id,
-                                @RequestParam(value = "error", required = false) String fileUploadError,
+    public String appInfoModify(@RequestParam("id") String id, @RequestParam(value = "error", required = false) String fileUploadError,
                                 Model model) {
         AppInfo appInfo = null;
         if (null != fileUploadError && fileUploadError.equals("error1")) {
@@ -314,8 +310,7 @@ public class AppMgtController {
      * 修改appInfo并保存
      */
     @RequestMapping(value = "/doAppInfoModify", method = RequestMethod.POST)
-    public String doAppInfoModify(AppInfo appInfo, HttpSession session, HttpServletRequest request,
-                                  @RequestParam(value = "attach", required = false) MultipartFile attach) {
+    public String doAppInfoModify(AppInfo appInfo, HttpSession session, HttpServletRequest request, @RequestParam(value = "attach", required = false) MultipartFile attach) {
         String logoPicPath = null;
         String logoLocPath = null;
         String APKName = appInfo.getAPKName();
@@ -424,9 +419,7 @@ public class AppMgtController {
      * 跳转到新增app版本页面
      */
     @RequestMapping(value = "/appVersionAdd", method = RequestMethod.GET)
-    public String appVersionAdd(@RequestParam(value = "id") String appId,
-                                @RequestParam(value = "error", required = false) String fileUploadError,
-                                AppVersion appVersion, Model model) {
+    public String appVersionAdd(@RequestParam(value = "id") String appId, @RequestParam(value = "error", required = false) String fileUploadError, AppVersion appVersion, Model model) {
         if (null != fileUploadError && fileUploadError.equals("error1")) {
             fileUploadError = SystemValues.FILEUPLOAD_ERROR_1;
         } else if (null != fileUploadError && fileUploadError.equals("error2")) {
@@ -454,8 +447,7 @@ public class AppMgtController {
      * 保存新增appversion数据（子表）-上传该版本的apk包
      */
     @RequestMapping(value = "/doAppVersionAdd", method = RequestMethod.POST)
-    public String doAppVersionAdd(AppVersion appVersion, HttpSession session, HttpServletRequest request,
-                                  @RequestParam(value = "a_downloadLink", required = false) MultipartFile attach) {
+    public String doAppVersionAdd(AppVersion appVersion, HttpSession session, HttpServletRequest request, @RequestParam(value = "a_downloadLink", required = false) MultipartFile attach) {
         String downloadLink = null;
         String apkLocPath = null;
         String apkFileName = null;
@@ -550,10 +542,7 @@ public class AppMgtController {
      * 跳转到修改appVersion页面
      */
     @RequestMapping(value = "/appVersionModify", method = RequestMethod.GET)
-    public String appVersionModify(@RequestParam("vid") String versionId,
-                                   @RequestParam("aid") String appId,
-                                   @RequestParam(value = "error", required = false) String fileUploadError,
-                                   Model model) {
+    public String appVersionModify(@RequestParam("vid") String versionId, @RequestParam("aid") String appId, @RequestParam(value = "error", required = false) String fileUploadError, Model model) {
         AppVersion appVersion = null;
         List<AppVersion> appVersionList = null;
         if (null != fileUploadError && fileUploadError.equals("error1")) {
@@ -581,8 +570,7 @@ public class AppMgtController {
      * 修改appVersion,并保存信息
      */
     @RequestMapping(value = "/doAppVersionModify", method = RequestMethod.POST)
-    public String doAppVersionModify(AppVersion appVersion, HttpSession session, HttpServletRequest request,
-                                     @RequestParam(value = "attach", required = false) MultipartFile attach) {
+    public String doAppVersionModify(AppVersion appVersion, HttpSession session, HttpServletRequest request, @RequestParam(value = "attach", required = false) MultipartFile attach) {
 
         String downloadLink = null;
         String apkLocPath = null;
@@ -644,8 +632,7 @@ public class AppMgtController {
      */
     @RequestMapping(value = "/delFile", method = RequestMethod.GET)
     @ResponseBody
-    public Object delfile(@RequestParam(value = "flag", required = false) String flag,
-                          @RequestParam(value = "id", required = false) String id) {
+    public Object delfile(@RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "id", required = false) String id) {
         HashMap<String, String> resultMap = new HashMap<String, String>();
         String fileLocPath = null;
         if (flag == null || flag.equals("") ||

@@ -44,13 +44,13 @@ public interface AppInfoMapper {
 	 */
 	public int updateVersionId(@Param(value = "versionId") Integer versionId, @Param(value = "id") Integer appId)throws Exception;
 	
-	/**
+	/*
 	 * updateSaleStatusByAppId
 	 * @param appId
 	 * @return
-	 * @throws Exception
+	 * @throws Exceptionpublic int updateSaleStatusByAppId(@Param(value = "id") Integer appId) throws Exception;
 	 */
-	public int updateSaleStatusByAppId(@Param(value = "id") Integer appId) throws Exception;
+
 
 	/*
 	 * 更新app状态

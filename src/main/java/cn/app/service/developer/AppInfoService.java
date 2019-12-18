@@ -15,11 +15,6 @@ public interface AppInfoService {
 	public boolean modify(AppInfo appInfo)throws Exception;
 	
 	/**
-	 * 根据appId删除app应用
-	 */
-	public boolean deleteAppInfoById(Integer delId)throws Exception;
-	
-	/**
 	 * 根据条件查询出app列表
 	 */
 	public List<AppInfo> getAppInfoList(String querySoftwareName, Integer queryStatus,
